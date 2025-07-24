@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, DollarSign, TrendingUp, TrendingDown, Target, Sparkles } from '@phosphor-icons/react';
+import { Plus, DollarSign, TrendingUp, TrendingDown, Target, Sparkles, Menu } from '@phosphor-icons/react';
 import { useKV } from '@github/spark/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -43,15 +43,16 @@ function Dashboard() {
   }, 0);
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Balance</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+    <div className="space-y-4 px-1">
+      {/* Mobile-optimized dashboard cards */}
+      <div className="grid grid-cols-2 gap-3">
+        <Card className="shadow-sm mobile-tap">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-muted-foreground">Balance</CardTitle>
+            <DollarSign className="h-3.5 w-3.5 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${balance >= 0 ? 'text-primary' : 'text-destructive'}`}>
+          <CardContent className="px-3 pb-3">
+            <div className={`text-lg font-bold ${balance >= 0 ? 'text-primary' : 'text-destructive'}`}>
               {formatCurrency(balance)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -60,56 +61,57 @@ function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Income</CardTitle>
-            <TrendingUp className="h-4 w-4 text-primary" />
+        <Card className="shadow-sm mobile-tap">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-muted-foreground">Budget Used</CardTitle>
+            <Target className="h-3.5 w-3.5 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-primary">{formatCurrency(totalIncome)}</div>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold">{totalBudget > 0 ? Math.round((totalActualSpent / totalBudget) * 100) : 0}%</div>
+            <p className="text-xs text-muted-foreground line-clamp-1">
+              {formatCurrency(totalActualSpent)} spent
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-sm mobile-tap">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-muted-foreground">Income</CardTitle>
+            <TrendingUp className="h-3.5 w-3.5 text-primary" />
+          </CardHeader>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-primary">{formatCurrency(totalIncome)}</div>
             <p className="text-xs text-muted-foreground">
               {currentMonthTransactions.filter(t => t.type === 'income').length} transactions
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Expenses</CardTitle>
-            <TrendingDown className="h-4 w-4 text-accent" />
+        <Card className="shadow-sm mobile-tap">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-muted-foreground">Expenses</CardTitle>
+            <TrendingDown className="h-3.5 w-3.5 text-accent" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-accent">{formatCurrency(totalExpenses)}</div>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-accent">{formatCurrency(totalExpenses)}</div>
             <p className="text-xs text-muted-foreground">
               {currentMonthTransactions.filter(t => t.type === 'expense').length} transactions
             </p>
           </CardContent>
         </Card>
-
-        <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Budget Used</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalBudget > 0 ? Math.round((totalActualSpent / totalBudget) * 100) : 0}%</div>
-            <p className="text-xs text-muted-foreground">
-              {formatCurrency(totalActualSpent)} of {formatCurrency(totalBudget)}
-            </p>
-          </CardContent>
-        </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* Mobile-optimized sections */}
+      <div className="space-y-4">
         <Card className="shadow-sm">
-          <CardHeader>
-            <CardTitle>Budget Categories</CardTitle>
+          <CardHeader className="px-4 py-3">
+            <CardTitle className="text-base">Budget Overview</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="px-4 pb-4 space-y-3">
             {budgets.length === 0 ? (
-              <p className="text-muted-foreground text-center py-4">No budgets set up yet</p>
+              <p className="text-muted-foreground text-center py-4 text-sm">No budgets set up yet</p>
             ) : (
-              budgets.map((budget) => {
+              budgets.slice(0, 3).map((budget) => {
                 const categorySpent = currentMonthTransactions
                   .filter(t => t.type === 'expense' && t.category === budget.name)
                   .reduce((sum, t) => sum + t.amount, 0);
@@ -117,8 +119,8 @@ function Dashboard() {
                 return (
                   <div key={budget.id} className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">{budget.name}</span>
-                      <span className="text-sm text-muted-foreground">
+                      <span className="font-medium text-sm">{budget.name}</span>
+                      <span className="text-xs text-muted-foreground">
                         {formatCurrency(categorySpent)} / {formatCurrency(budget.limit)}
                       </span>
                     </div>
@@ -136,24 +138,29 @@ function Dashboard() {
                 );
               })
             )}
+            {budgets.length > 3 && (
+              <p className="text-xs text-muted-foreground text-center pt-2">
+                +{budgets.length - 3} more budgets
+              </p>
+            )}
           </CardContent>
         </Card>
 
         <Card className="shadow-sm">
-          <CardHeader>
-            <CardTitle>Savings Goals</CardTitle>
+          <CardHeader className="px-4 py-3">
+            <CardTitle className="text-base">Savings Goals</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="px-4 pb-4 space-y-3">
             {goals.length === 0 ? (
-              <p className="text-muted-foreground text-center py-4">No savings goals yet</p>
+              <p className="text-muted-foreground text-center py-4 text-sm">No savings goals yet</p>
             ) : (
-              goals.map((goal) => {
+              goals.slice(0, 2).map((goal) => {
                 const percentage = goal.targetAmount > 0 ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
                 return (
                   <div key={goal.id} className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">{goal.name}</span>
-                      <span className="text-sm text-muted-foreground">
+                      <span className="font-medium text-sm">{goal.name}</span>
+                      <span className="text-xs text-muted-foreground">
                         {formatCurrency(goal.currentAmount)} / {formatCurrency(goal.targetAmount)}
                       </span>
                     </div>
@@ -167,6 +174,11 @@ function Dashboard() {
                   </div>
                 );
               })
+            )}
+            {goals.length > 2 && (
+              <p className="text-xs text-muted-foreground text-center pt-2">
+                +{goals.length - 2} more goals
+              </p>
             )}
           </CardContent>
         </Card>
@@ -191,22 +203,24 @@ function App() {
   const hasAnyData = transactions.length > 0 || budgets.length > 0 || goals.length > 0;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-4 lg:py-6 max-w-7xl">
-        <div className="flex flex-col gap-4 mb-6 lg:mb-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="min-h-screen bg-background safe-area-inset">
+      <div className="container mx-auto px-3 py-3 max-w-md">
+        {/* Mobile header */}
+        <div className="flex flex-col gap-3 mb-4">
+          <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold">Budget Tracker</h1>
-              <p className="text-muted-foreground text-sm lg:text-base">Manage your finances with confidence</p>
+              <h1 className="text-xl font-bold">Budget Tracker</h1>
+              <p className="text-muted-foreground text-sm">Manage your finances</p>
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-2 w-full">
+          {/* Mobile action buttons */}
+          <div className="flex gap-2">
             {!hasAnyData && (
               <Button 
                 variant="outline" 
                 onClick={loadSampleData} 
-                className="gap-2 h-12 text-sm font-medium"
+                className="gap-2 h-11 text-sm font-medium mobile-tap touch-target flex-1"
               >
                 <Sparkles className="h-4 w-4" />
                 Try Sample Data
@@ -214,7 +228,7 @@ function App() {
             )}
             <Button 
               onClick={() => setShowTransactionForm(true)} 
-              className="gap-2 h-12 text-sm font-medium bg-primary hover:bg-primary/90"
+              className="gap-2 h-11 text-sm font-medium bg-primary hover:bg-primary/90 mobile-tap touch-target flex-1"
             >
               <Plus className="h-4 w-4" />
               Add Transaction
@@ -222,39 +236,49 @@ function App() {
           </div>
         </div>
 
-        <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 h-auto">
-            <TabsTrigger value="dashboard" className="h-12 text-sm">Dashboard</TabsTrigger>
-            <TabsTrigger value="transactions" className="h-12 text-sm">Transactions</TabsTrigger>
-            <TabsTrigger value="budgets" className="h-12 text-sm">Budgets</TabsTrigger>
-            <TabsTrigger value="goals" className="h-12 text-sm">Goals</TabsTrigger>
+        {/* Mobile-optimized tabs */}
+        <Tabs defaultValue="dashboard" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4 h-12 bg-muted/50">
+            <TabsTrigger value="dashboard" className="h-10 text-xs font-medium mobile-tap">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="transactions" className="h-10 text-xs font-medium mobile-tap">
+              History
+            </TabsTrigger>
+            <TabsTrigger value="budgets" className="h-10 text-xs font-medium mobile-tap">
+              Budgets
+            </TabsTrigger>
+            <TabsTrigger value="goals" className="h-10 text-xs font-medium mobile-tap">
+              Goals
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="dashboard">
+          <TabsContent value="dashboard" className="mt-4">
             <Dashboard />
           </TabsContent>
 
-          <TabsContent value="transactions">
+          <TabsContent value="transactions" className="mt-4">
             <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h2 className="text-xl lg:text-2xl font-bold">Transactions</h2>
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-bold">Transactions</h2>
                 <Button 
                   onClick={() => setShowTransactionForm(true)} 
-                  className="gap-2 h-12 w-full sm:w-auto"
+                  size="sm"
+                  className="gap-2 h-9 mobile-tap touch-target"
                 >
-                  <Plus className="h-4 w-4" />
-                  Add Transaction
+                  <Plus className="h-3.5 w-3.5" />
+                  Add
                 </Button>
               </div>
               <TransactionList />
             </div>
           </TabsContent>
 
-          <TabsContent value="budgets">
+          <TabsContent value="budgets" className="mt-4">
             <BudgetManagement />
           </TabsContent>
 
-          <TabsContent value="goals">
+          <TabsContent value="goals" className="mt-4">
             <GoalManagement />
           </TabsContent>
         </Tabs>
@@ -263,6 +287,15 @@ function App() {
           open={showTransactionForm} 
           onOpenChange={setShowTransactionForm}
         />
+        
+        {/* Floating Action Button for mobile */}
+        <Button
+          onClick={() => setShowTransactionForm(true)}
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-primary hover:bg-primary/90 mobile-tap touch-target lg:hidden"
+          size="icon"
+        >
+          <Plus className="h-6 w-6" />
+        </Button>
         
         <Toaster />
       </div>

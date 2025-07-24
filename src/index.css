@@ -6,8 +6,38 @@
     @apply border-border;
   }
   
+  html {
+    /* Prevent zoom on iOS Safari when input is focused */
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior: none;
+    /* Hide scrollbars on mobile while maintaining functionality */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent text selection on UI elements */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection for content areas */
+  .selectable {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  
+  /* Enhanced touch targets */
+  button, [role="button"], input, textarea, select {
+    touch-action: manipulation;
+  }
+  
+  /* Smooth scrolling for mobile */
+  * {
+    scroll-behavior: smooth;
   }
 }
 
@@ -32,29 +62,61 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
+  
+  /* Mobile-first utilities */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Hide scrollbars while maintaining functionality */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Enhanced mobile animations */
+  .mobile-tap {
+    transition: transform 0.1s ease-out, background-color 0.15s ease-out;
+  }
+  
+  .mobile-tap:active {
+    transform: scale(0.98);
+  }
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.2 0.02 0);
+  --background: oklch(0.98 0.01 0);
+  --foreground: oklch(0.15 0.02 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.02 0);
+  --card-foreground: oklch(0.15 0.02 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 0);
-  --primary: oklch(0.45 0.15 150);
+  --popover-foreground: oklch(0.15 0.02 0);
+  --primary: oklch(0.45 0.18 150);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.85 0.02 0);
+  --secondary: oklch(0.94 0.02 0);
   --secondary-foreground: oklch(0.2 0.02 0);
-  --muted: oklch(0.95 0.02 0);
-  --muted-foreground: oklch(0.5 0.02 0);
-  --accent: oklch(0.65 0.18 45);
+  --muted: oklch(0.96 0.02 0);
+  --muted-foreground: oklch(0.45 0.02 0);
+  --accent: oklch(0.6 0.2 45);
   --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.65 0.2 30);
+  --destructive: oklch(0.62 0.2 30);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0.02 0);
-  --input: oklch(0.9 0.02 0);
-  --ring: oklch(0.45 0.15 150);
-  --radius: 0.5rem;
+  --border: oklch(0.91 0.02 0);
+  --input: oklch(0.91 0.02 0);
+  --ring: oklch(0.45 0.18 150);
+  --radius: 0.75rem;
 }
 
 @theme {
