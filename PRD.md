@@ -1,6 +1,6 @@
 # Budget Tracker - Product Requirements Document
 
-A comprehensive personal finance management tool that helps users track income, expenses, and savings goals with intuitive visualizations and actionable insights.
+A comprehensive personal finance management tool optimized for mobile-first usage, providing a native app-like experience through progressive web app technologies with Flutter-inspired smooth animations and gestures.
 
 **Experience Qualities**:
 1. **Trustworthy** - Users feel confident their financial data is secure and accurate

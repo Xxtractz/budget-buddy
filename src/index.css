@@ -41,6 +41,63 @@
   }
 }
 
+@import 'tailwindcss';
+@import "tw-animate-css";
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    /* Prevent zoom on iOS Safari when input is focused */
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Better scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior: none;
+    /* Hide scrollbars on mobile while maintaining functionality */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent text selection on UI elements */
+    -webkit-user-select: none;
+    user-select: none;
+    /* Better font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent highlight on tap */
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Allow text selection for content areas */
+  .selectable {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  
+  /* Enhanced touch targets */
+  button, [role="button"], input, textarea, select {
+    touch-action: manipulation;
+  }
+  
+  /* Smooth scrolling for mobile */
+  * {
+    scroll-behavior: smooth;
+  }
+  
+  /* Flutter-inspired focus states */
+  *:focus-visible {
+    outline: 2px solid oklch(0.45 0.18 150);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+}
+
 @layer utilities {
   .line-clamp-1 {
     overflow: hidden;
@@ -86,37 +143,155 @@
     display: none;
   }
   
-  /* Enhanced mobile animations */
-  .mobile-tap {
-    transition: transform 0.1s ease-out, background-color 0.15s ease-out;
+  /* Flutter-inspired mobile animations */
+  .flutter-tap {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
   }
   
-  .mobile-tap:active {
-    transform: scale(0.98);
+  .flutter-tap:active {
+    transform: scale(0.96);
+    filter: brightness(0.95);
+  }
+  
+  .flutter-bounce {
+    animation: flutter-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  @keyframes flutter-bounce {
+    0% {
+      transform: scale(0.8) translateY(20px);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.05) translateY(-5px);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .flutter-slide-up {
+    animation: flutter-slide-up 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  @keyframes flutter-slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .flutter-fade-in {
+    animation: flutter-fade-in 0.4s ease-out;
+  }
+  
+  @keyframes flutter-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Ripple effect for buttons */
+  .ripple {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .ripple::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  .ripple:active::before {
+    width: 300px;
+    height: 300px;
+  }
+  
+  /* Enhanced card shadows */
+  .card-elevated {
+    box-shadow: 
+      0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+  
+  .card-elevated-hover {
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Glass morphism effects */
+  .glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
 :root {
-  --background: oklch(0.98 0.01 0);
-  --foreground: oklch(0.15 0.02 0);
+  /* Flutter-inspired color palette */
+  --background: oklch(0.99 0.01 0);
+  --foreground: oklch(0.13 0.02 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.02 0);
+  --card-foreground: oklch(0.13 0.02 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 0);
-  --primary: oklch(0.45 0.18 150);
+  --popover-foreground: oklch(0.13 0.02 0);
+  
+  /* Material Design inspired primary - emerald green */
+  --primary: oklch(0.52 0.15 160);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.94 0.02 0);
-  --secondary-foreground: oklch(0.2 0.02 0);
-  --muted: oklch(0.96 0.02 0);
+  
+  /* Soft neutral secondary */
+  --secondary: oklch(0.95 0.01 0);
+  --secondary-foreground: oklch(0.25 0.02 0);
+  
+  /* Subtle muted tones */
+  --muted: oklch(0.97 0.01 0);
   --muted-foreground: oklch(0.45 0.02 0);
-  --accent: oklch(0.6 0.2 45);
+  
+  /* Warm accent - amber/orange for spending */
+  --accent: oklch(0.65 0.18 40);
   --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.62 0.2 30);
+  
+  /* Soft destructive red */
+  --destructive: oklch(0.55 0.18 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.91 0.02 0);
-  --input: oklch(0.91 0.02 0);
-  --ring: oklch(0.45 0.18 150);
-  --radius: 0.75rem;
+  
+  /* Ultra-subtle borders */
+  --border: oklch(0.93 0.01 0);
+  --input: oklch(0.93 0.01 0);
+  --ring: oklch(0.52 0.15 160);
+  
+  /* Larger radius for modern Flutter feel */
+  --radius: 0.875rem;
 }
 
 @theme {
