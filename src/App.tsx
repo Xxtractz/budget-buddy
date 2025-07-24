@@ -45,7 +45,7 @@ function Dashboard() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Balance</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -60,7 +60,7 @@ function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Income</CardTitle>
             <TrendingUp className="h-4 w-4 text-primary" />
@@ -73,7 +73,7 @@ function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Expenses</CardTitle>
             <TrendingDown className="h-4 w-4 text-accent" />
@@ -86,7 +86,7 @@ function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Budget Used</CardTitle>
             <Target className="h-4 w-4 text-muted-foreground" />
@@ -100,8 +100,8 @@ function Dashboard() {
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className="shadow-sm">
           <CardHeader>
             <CardTitle>Budget Categories</CardTitle>
           </CardHeader>
@@ -139,7 +139,7 @@ function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-sm">
           <CardHeader>
             <CardTitle>Savings Goals</CardTitle>
           </CardHeader>
@@ -192,20 +192,30 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-6 max-w-7xl">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Budget Tracker</h1>
-            <p className="text-muted-foreground">Manage your finances with confidence</p>
+      <div className="container mx-auto px-4 py-4 lg:py-6 max-w-7xl">
+        <div className="flex flex-col gap-4 mb-6 lg:mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-bold">Budget Tracker</h1>
+              <p className="text-muted-foreground text-sm lg:text-base">Manage your finances with confidence</p>
+            </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          
+          <div className="flex flex-col sm:flex-row gap-2 w-full">
             {!hasAnyData && (
-              <Button variant="outline" onClick={loadSampleData} className="gap-2 w-full sm:w-auto">
+              <Button 
+                variant="outline" 
+                onClick={loadSampleData} 
+                className="gap-2 h-12 text-sm font-medium"
+              >
                 <Sparkles className="h-4 w-4" />
                 Try Sample Data
               </Button>
             )}
-            <Button onClick={() => setShowTransactionForm(true)} className="gap-2 w-full sm:w-auto">
+            <Button 
+              onClick={() => setShowTransactionForm(true)} 
+              className="gap-2 h-12 text-sm font-medium bg-primary hover:bg-primary/90"
+            >
               <Plus className="h-4 w-4" />
               Add Transaction
             </Button>
@@ -213,11 +223,11 @@ function App() {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="transactions">Transactions</TabsTrigger>
-            <TabsTrigger value="budgets">Budgets</TabsTrigger>
-            <TabsTrigger value="goals">Goals</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 h-auto">
+            <TabsTrigger value="dashboard" className="h-12 text-sm">Dashboard</TabsTrigger>
+            <TabsTrigger value="transactions" className="h-12 text-sm">Transactions</TabsTrigger>
+            <TabsTrigger value="budgets" className="h-12 text-sm">Budgets</TabsTrigger>
+            <TabsTrigger value="goals" className="h-12 text-sm">Goals</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard">
@@ -226,9 +236,12 @@ function App() {
 
           <TabsContent value="transactions">
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Transactions</h2>
-                <Button onClick={() => setShowTransactionForm(true)} className="gap-2">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h2 className="text-xl lg:text-2xl font-bold">Transactions</h2>
+                <Button 
+                  onClick={() => setShowTransactionForm(true)} 
+                  className="gap-2 h-12 w-full sm:w-auto"
+                >
                   <Plus className="h-4 w-4" />
                   Add Transaction
                 </Button>

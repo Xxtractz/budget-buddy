@@ -36,12 +36,12 @@ function ContributeDialog({ goal, open, onOpenChange, onContribute }: Contribute
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] mx-4">
         <DialogHeader>
-          <DialogTitle>Add to {goal.name}</DialogTitle>
+          <DialogTitle className="text-xl">Add to {goal.name}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
               Current progress: {formatCurrency(goal.currentAmount)} / {formatCurrency(goal.targetAmount)}
             </p>
@@ -51,14 +51,23 @@ function ContributeDialog({ goal, open, onOpenChange, onContribute }: Contribute
               placeholder="Amount to add"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              className="h-12 text-base"
               required
             />
           </div>
-          <div className="flex gap-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => onOpenChange(false)} 
+              className="h-12 text-base font-medium flex-1"
+            >
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button 
+              type="submit" 
+              className="h-12 text-base font-medium flex-1"
+            >
               Add Funds
             </Button>
           </div>
@@ -99,23 +108,28 @@ export function GoalManagement() {
   if (goals.length === 0) {
     return (
       <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Savings Goals</h2>
-          <Button onClick={() => setShowForm(true)} className="gap-2">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h2 className="text-xl lg:text-2xl font-bold">Savings Goals</h2>
+          <Button 
+            onClick={() => setShowForm(true)} 
+            className="gap-2 h-12 w-full sm:w-auto"
+          >
             <Plus className="h-4 w-4" />
             Add Goal
           </Button>
         </div>
         
-        <Card>
-          <CardContent className="p-12 text-center">
+        <Card className="shadow-sm">
+          <CardContent className="p-8 lg:p-12 text-center">
             <div className="text-muted-foreground">
               <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
                 <Target className="h-8 w-8" />
               </div>
               <h3 className="text-lg font-medium mb-2">No savings goals yet</h3>
-              <p className="mb-4">Set financial goals to stay motivated and track your progress.</p>
-              <Button onClick={() => setShowForm(true)}>Create Your First Goal</Button>
+              <p className="mb-4 text-sm lg:text-base">Set financial goals to stay motivated and track your progress.</p>
+              <Button onClick={() => setShowForm(true)} className="h-12">
+                Create Your First Goal
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -127,15 +141,18 @@ export function GoalManagement() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Savings Goals</h2>
-        <Button onClick={() => setShowForm(true)} className="gap-2">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-xl lg:text-2xl font-bold">Savings Goals</h2>
+        <Button 
+          onClick={() => setShowForm(true)} 
+          className="gap-2 h-12 w-full sm:w-auto"
+        >
           <Plus className="h-4 w-4" />
           Add Goal
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {goals.map((goal) => {
           const percentage = goal.targetAmount > 0 ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
           const daysRemaining = getDaysRemaining(goal.deadline);
@@ -143,19 +160,19 @@ export function GoalManagement() {
           const isOverdue = daysRemaining < 0 && !isCompleted;
           
           return (
-            <Card key={goal.id} className="hover:shadow-md transition-shadow">
+            <Card key={goal.id} className="hover:shadow-md transition-shadow shadow-sm">
               <CardHeader className="pb-3">
-                <div className="flex justify-between items-start">
-                  <div className="flex items-center gap-3">
-                    <Target className="h-5 w-5 text-primary" />
-                    <CardTitle className="text-lg">{goal.name}</CardTitle>
+                <div className="flex justify-between items-start gap-3">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <Target className="h-5 w-5 text-primary flex-shrink-0" />
+                    <CardTitle className="text-lg truncate">{goal.name}</CardTitle>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 flex-shrink-0">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => setContributeGoal(goal)}
-                      className="h-8 w-8 p-0"
+                      className="h-10 w-10 p-0"
                       disabled={isCompleted}
                     >
                       <Plus className="h-4 w-4" />
@@ -164,7 +181,7 @@ export function GoalManagement() {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDelete(goal.id)}
-                      className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+                      className="h-10 w-10 p-0 hover:bg-destructive/10 hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -181,22 +198,24 @@ export function GoalManagement() {
                 
                 <Progress value={Math.min(percentage, 100)} className="h-2" />
                 
-                <div className="flex justify-between items-center text-sm">
-                  <div className="flex items-center gap-1 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span>{formatDate(goal.deadline)}</span>
+                <div className="flex justify-between items-center text-sm gap-2">
+                  <div className="flex items-center gap-1 text-muted-foreground flex-1 min-w-0">
+                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{formatDate(goal.deadline)}</span>
                   </div>
-                  {isCompleted && (
-                    <Badge className="bg-primary text-primary-foreground">Completed!</Badge>
-                  )}
-                  {isOverdue && (
-                    <Badge variant="destructive">Overdue</Badge>
-                  )}
-                  {!isCompleted && !isOverdue && daysRemaining <= 30 && (
-                    <Badge variant="outline" className="border-accent text-accent">
-                      {daysRemaining} days left
-                    </Badge>
-                  )}
+                  <div className="flex-shrink-0">
+                    {isCompleted && (
+                      <Badge className="bg-primary text-primary-foreground">Completed!</Badge>
+                    )}
+                    {isOverdue && (
+                      <Badge variant="destructive">Overdue</Badge>
+                    )}
+                    {!isCompleted && !isOverdue && daysRemaining <= 30 && (
+                      <Badge variant="outline" className="border-accent text-accent">
+                        {daysRemaining} days left
+                      </Badge>
+                    )}
+                  </div>
                 </div>
 
                 <div className="text-sm text-muted-foreground">

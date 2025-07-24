@@ -67,27 +67,27 @@ export function TransactionForm({ open, onOpenChange }: TransactionFormProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto mx-4">
         <DialogHeader>
-          <DialogTitle>Add Transaction</DialogTitle>
+          <DialogTitle className="text-xl">Add Transaction</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-3">
-            <Label>Transaction Type</Label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-4">
+            <Label className="text-base font-medium">Transaction Type</Label>
             <RadioGroup value={type} onValueChange={(value) => setType(value as 'income' | 'expense')}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="expense" id="expense" />
-                <Label htmlFor="expense">Expense</Label>
+              <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors">
+                <RadioGroupItem value="expense" id="expense" className="h-5 w-5" />
+                <Label htmlFor="expense" className="text-base font-normal flex-1 cursor-pointer">Expense</Label>
               </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="income" id="income" />
-                <Label htmlFor="income">Income</Label>
+              <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors">
+                <RadioGroupItem value="income" id="income" className="h-5 w-5" />
+                <Label htmlFor="income" className="text-base font-normal flex-1 cursor-pointer">Income</Label>
               </div>
             </RadioGroup>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="amount">Amount *</Label>
+            <Label htmlFor="amount" className="text-base font-medium">Amount *</Label>
             <Input
               id="amount"
               type="number"
@@ -95,25 +95,26 @@ export function TransactionForm({ open, onOpenChange }: TransactionFormProps) {
               placeholder="0.00"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              className="h-12 text-base"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category">Category *</Label>
+            <Label htmlFor="category" className="text-base font-medium">Category *</Label>
             <Select value={category} onValueChange={setCategory} required>
-              <SelectTrigger>
+              <SelectTrigger className="h-12 text-base">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
-                  <SelectItem key={cat.name} value={cat.name}>
-                    <div className="flex items-center gap-2">
+                  <SelectItem key={cat.name} value={cat.name} className="p-3">
+                    <div className="flex items-center gap-3">
                       <div 
-                        className="w-3 h-3 rounded-full" 
+                        className="w-4 h-4 rounded-full flex-shrink-0" 
                         style={{ backgroundColor: cat.color }}
                       />
-                      {cat.name}
+                      <span className="text-base">{cat.name}</span>
                     </div>
                   </SelectItem>
                 ))}
@@ -122,31 +123,41 @@ export function TransactionForm({ open, onOpenChange }: TransactionFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description" className="text-base font-medium">Description</Label>
             <Textarea
               id="description"
               placeholder="Optional description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              rows={2}
+              className="min-h-[80px] text-base resize-none"
+              rows={3}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="date">Date</Label>
+            <Label htmlFor="date" className="text-base font-medium">Date</Label>
             <Input
               id="date"
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+              className="h-12 text-base"
             />
           </div>
 
-          <div className="flex gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => onOpenChange(false)} 
+              className="h-12 text-base font-medium flex-1"
+            >
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button 
+              type="submit" 
+              className="h-12 text-base font-medium flex-1 bg-primary hover:bg-primary/90"
+            >
               Add {type === 'income' ? 'Income' : 'Expense'}
             </Button>
           </div>
